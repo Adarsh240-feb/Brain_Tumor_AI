@@ -73,8 +73,9 @@ import mongoose from "mongoose";
 const patientSchema = new mongoose.Schema(
 {
     doctorId:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:"Doctor",
+        // type: mongoose.Schema.Types.ObjectId,
+        // ref:"Doctor",
+        type:String,
         required:true
     },
 
