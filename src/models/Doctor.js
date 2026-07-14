@@ -11,9 +11,12 @@ const doctorSchema = new mongoose.Schema(
       unique: true,
     },
 
-    name: {
+    firstName: {
       type: String,
       required: true,
+    },
+    lastName: {
+      type: String,
     },
 
     email: {
