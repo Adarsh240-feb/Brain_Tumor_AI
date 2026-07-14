@@ -125,15 +125,25 @@
 #             "message": str(e)
 #         }
 import os
+# Suppress TensorFlow warnings and oneDNN custom operations logs
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+
+import logging
+logging.getLogger('tensorflow').setLevel(logging.ERROR)
 import numpy as np
 import tensorflow as tf
+# pyrefly: ignore [missing-import]
 from tensorflow.keras.preprocessing import image
 
 from gradcam import generate_gradcam
 from segmentation import segment_tumor
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # Load Trained Model
-model = tf.keras.models.load_model("model/brain_tumor_model.keras")
+model_path = os.path.join(BASE_DIR, "model", "brain_tumor_model.keras")
+model = tf.keras.models.load_model(model_path)
 
 dummy = np.zeros((1, 150, 150, 3), dtype=np.float32)
 _ = model(dummy)
@@ -189,12 +199,13 @@ def predict_tumor(image_path):
         # Generate Grad-CAM Heatmap
         
 
-        os.makedirs("heatmaps", exist_ok=True)
+        heatmap_dir = os.path.join(BASE_DIR, "heatmaps")
+        os.makedirs(heatmap_dir, exist_ok=True)
 
         heatmap_filename = os.path.basename(image_path)
 
         heatmap_path = os.path.join(
-            "heatmaps",
+            heatmap_dir,
             heatmap_filename
         )
 
@@ -209,12 +220,13 @@ def predict_tumor(image_path):
         # Generate Segmentation
         
 
-        os.makedirs("segmentations", exist_ok=True)
+        segmentation_dir = os.path.join(BASE_DIR, "segmentations")
+        os.makedirs(segmentation_dir, exist_ok=True)
 
         segmentation_filename = os.path.basename(image_path)
 
         segmentation_path = os.path.join(
-            "segmentations",
+            segmentation_dir,
             segmentation_filename
         )
 

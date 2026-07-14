@@ -186,8 +186,5 @@ const patientSchema = new mongoose.Schema(
 }
 );
 
-if (mongoose.models.Patient) {
-  delete mongoose.models.Patient;
-}
-
-export default mongoose.model("Patient", patientSchema);
+export { patientSchema };
+export default mongoose.models.Patient || mongoose.model("Patient", patientSchema);

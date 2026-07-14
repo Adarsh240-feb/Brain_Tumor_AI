@@ -1,12 +1,13 @@
+import os
+# Suppress TensorFlow warnings and oneDNN custom operations logs
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
 # Flask backend import
 from flask import Flask, request, jsonify, send_from_directory
 
 # to connect next js frontend to backend
 from flask_cors import CORS
-
-# for saving file 
-import os
 
 # Prediction function import
 from predict import predict_tumor
@@ -18,10 +19,13 @@ app = Flask(__name__)
 CORS(app)
 
 
+# BASE DIR
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # Upload Folder
 
 # MRI images is saved in this folder
-UPLOAD_FOLDER = "uploads"
+UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
 
 # if folder not exist automatically created
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -55,13 +59,13 @@ def uploaded_file(filename):
 @app.route("/heatmaps/<filename>")
 def heatmap_file(filename):
     return send_from_directory(
-        "heatmaps",
+        os.path.join(BASE_DIR, "heatmaps"),
         filename
     )
 @app.route("/segmentations/<filename>")
 def segmentation_file(filename):
     return send_from_directory(
-        "segmentations",
+        os.path.join(BASE_DIR, "segmentations"),
         filename
     )
 

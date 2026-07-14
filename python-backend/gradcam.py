@@ -173,7 +173,7 @@ def generate_gradcam(model, img_array, predicted_index, save_path):
         0
     )
 
-    os.makedirs("heatmaps", exist_ok=True)
+    os.makedirs(os.path.dirname(os.path.abspath(save_path)), exist_ok=True)
 
     cv2.imwrite(save_path, overlay)
 

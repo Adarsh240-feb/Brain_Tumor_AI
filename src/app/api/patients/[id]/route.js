@@ -1,5 +1,6 @@
 import connectDB from "@/lib/mongodb";
 import Patient from "@/models/Patient";
+import Doctor from "@/models/Doctor";
 
 export async function GET(request, context) {
   try {
@@ -51,6 +52,12 @@ export async function DELETE(request, context) {
         { status: 404 }
       );
     }
+
+    // Remove the patient from the Doctor's patients list
+    await Doctor.findOneAndUpdate(
+      { firebaseUid: patient.doctorId },
+      { $pull: { patients: { _id: id } } }
+    );
 
     return Response.json({
       success: true,

@@ -1,6 +1,5 @@
-// src/models/Doctor.js
-
 import mongoose from "mongoose";
+import { patientSchema } from "./Patient";
 
 const doctorSchema = new mongoose.Schema(
   {
@@ -42,11 +41,17 @@ const doctorSchema = new mongoose.Schema(
     profilePic: {
       type: String,
     },
+
+    // patients associated with this doctor
+    patients: [patientSchema],
   },
   {
     timestamps: true,
   }
 );
 
-export default mongoose.models.Doctor ||
-  mongoose.model("Doctor", doctorSchema);
+if (mongoose.models.Doctor) {
+  delete mongoose.models.Doctor;
+}
+
+export default mongoose.model("Doctor", doctorSchema);
