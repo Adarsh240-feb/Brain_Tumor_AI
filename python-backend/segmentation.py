@@ -144,8 +144,6 @@ def segment_tumor(image_path, save_path):
     if image is None:
         raise ValueError("Image not found.")
 
-    original = image.copy()
-
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     # Noise remove
@@ -184,7 +182,7 @@ def segment_tumor(image_path, save_path):
         cv2.CHAIN_APPROX_SIMPLE
     )
 
-    segmented = original.copy()
+    segmented = image.copy()
 
     width = 0
     height = 0

@@ -90,24 +90,31 @@ import numpy as np
 import tensorflow as tf
 
 
+# Cache to avoid recreating the model on every request
+CACHED_GRAD_MODEL = None
+
 def generate_gradcam(model, img_array, predicted_index, save_path):
+    global CACHED_GRAD_MODEL
 
-    # Find last Conv2D layer
-    last_conv_layer = None
+    if CACHED_GRAD_MODEL is None:
+        # Find last Conv2D layer
+        last_conv_layer = None
 
-    for layer in reversed(model.layers):
-        if isinstance(layer, tf.keras.layers.Conv2D):
-            last_conv_layer = layer
-            break
+        for layer in reversed(model.layers):
+            if isinstance(layer, tf.keras.layers.Conv2D):
+                last_conv_layer = layer
+                break
 
-    if last_conv_layer is None:
-        raise ValueError("No Conv2D layer found in model.")
+        if last_conv_layer is None:
+            raise ValueError("No Conv2D layer found in model.")
 
-    # Create model for Grad-CAM
-    grad_model = tf.keras.Model(
-        inputs=model.input,
-        outputs=[last_conv_layer.output, model.output]
-    )
+        # Create model for Grad-CAM
+        CACHED_GRAD_MODEL = tf.keras.Model(
+            inputs=model.input,
+            outputs=[last_conv_layer.output, model.output]
+        )
+
+    grad_model = CACHED_GRAD_MODEL
 
     with tf.GradientTape() as tape:
 

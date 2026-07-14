@@ -167,10 +167,11 @@ def predict_tumor(image_path):
         img_array = np.expand_dims(img_array, axis=0)
 
         # Prediction
-        prediction = model.predict(
+        prediction_tensor = model(
             img_array,
-            verbose=0
+            training=False
         )
+        prediction = prediction_tensor.numpy()
 
         # Highest Probability Index
         predicted_index = np.argmax(prediction)

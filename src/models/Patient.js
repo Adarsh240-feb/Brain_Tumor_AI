@@ -151,6 +151,8 @@ const patientSchema = new mongoose.Schema(
     severity:{
         type:String,
         enum:[
+            "None",
+            "Needs Review",
             "Low",
             "Medium",
             "High"
@@ -184,5 +186,8 @@ const patientSchema = new mongoose.Schema(
 }
 );
 
-export default mongoose.models.Patient ||
-mongoose.model("Patient", patientSchema);
+if (mongoose.models.Patient) {
+  delete mongoose.models.Patient;
+}
+
+export default mongoose.model("Patient", patientSchema);
