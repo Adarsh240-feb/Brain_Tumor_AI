@@ -282,7 +282,7 @@ def segment_tumor(image_path, save_path):
             -1
         )
 
-    os.makedirs("segmentations", exist_ok=True)
+    os.makedirs(os.path.dirname(os.path.abspath(save_path)), exist_ok=True)
 
     cv2.imwrite(save_path, segmented)
 

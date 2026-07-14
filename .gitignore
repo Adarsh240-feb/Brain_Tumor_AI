@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -58,3 +59,11 @@ __pycache__/
 
 # OS files
 Thumbs.db
+
+# IDE settings
+.vscode/
+
+# Python backend dynamic outputs
+python-backend/heatmaps/
+python-backend/segmentations/
+python-backend/uploads/

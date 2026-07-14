@@ -23,6 +23,7 @@
 
 import connectDB from "@/lib/mongodb";
 import Patient from "@/models/Patient";
+import Doctor from "@/models/Doctor";
 
 // get patients
 export async function GET(req) {
@@ -61,6 +62,12 @@ export async function POST(req) {
     const body = await req.json();
 
     const patient = await Patient.create(body);
+
+    // Link the patient to the Doctor document as an embedded subdocument
+    await Doctor.findOneAndUpdate(
+      { firebaseUid: body.doctorId },
+      { $push: { patients: patient.toObject() } }
+    );
 
     return Response.json({
       success: true,
